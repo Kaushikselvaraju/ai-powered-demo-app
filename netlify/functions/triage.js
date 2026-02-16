@@ -36,7 +36,7 @@ const RESPONSE_SCHEMA = {
       items: {
         type: "string",
         minLength: 3,
-        pattern: "^(Gather|Define|Identify|Review|Assess|Analyze|Map|Document|Implement|Automate|Configure|Create|Set|Establish|Build|Prototype|Pilot|Test|Deploy|Monitor|Measure|Train|Communicate|Schedule|Prioritize|Standardize|Integrate|Refine|Update|Validate|Draft|Run|Enable|Collect|Clean|Design|Plan|Decide|Align)\\b.*$"
+        pattern: "^(?:\\s*(?:\\d+[\\.\\)\\:\\-]\\s*|[-•]\\s*))?[A-Z][a-zA-Z]+\\b.*$"
       }
     }
   },
@@ -114,7 +114,7 @@ function validateTriageShape(obj) {
     return null;
   }
 
-  const nextStepsPattern = /^(Gather|Define|Identify|Review|Assess|Analyze|Map|Document|Implement|Automate|Configure|Create|Set|Establish|Build|Prototype|Pilot|Test|Deploy|Monitor|Measure|Train|Communicate|Schedule|Prioritize|Standardize|Integrate|Refine|Update|Validate|Draft|Run|Enable|Collect|Clean|Design|Plan|Decide|Align)\b.*$/;
+  const nextStepsPattern = /^(?:\s*(?:\d+[\.\)\:\-]\s*|[-•]\s*))?[A-Z][a-zA-Z]+\b.*$/;
   return (
     checkArray("clarifying_questions", 3, 5, 5) ||
     checkArray("proposed_approach", 4, 7, 5) ||
@@ -190,7 +190,7 @@ export const handler = async (event) => {
     "You are an assistant that produces structured JSON for ticket triage. " +
     "Return ONLY valid JSON matching the provided schema. Do not wrap in markdown. " +
     "Do not include the schema keys as literal text inside any string values. " +
-    "The next_steps array must contain 4-7 items, and each item must start with an action verb (e.g., Gather, Define, Implement, Review).";
+    "The next_steps array must contain 4-7 items, and each item must start with an action verb (no numbering or bullet prefixes).";
 
   try {
     const client = new OpenAI({ apiKey });
